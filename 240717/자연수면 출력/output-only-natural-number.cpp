@@ -12,7 +12,7 @@ int main() {
         }
     }
     else{
-        cout < 0;
+        cout << 0;
     }
     return 0;
 }
