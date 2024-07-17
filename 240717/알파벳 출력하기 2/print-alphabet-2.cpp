@@ -13,7 +13,8 @@ int main() {
             if(j < i) cout << "  ";
             else{
                 cout << c << " ";
-                c += 1;
+                if(c == 'Z') c = 'A';
+                else c += 1;
             }
         }
         cout << endl;
