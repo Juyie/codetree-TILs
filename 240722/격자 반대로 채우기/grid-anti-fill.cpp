@@ -14,6 +14,7 @@ int main() {
             cnt++;
         }
         i--;
+        if(i < 0) break;
         for(int j = 0; j < n; j++){
             arr[j][i] = cnt;
             cnt++;
