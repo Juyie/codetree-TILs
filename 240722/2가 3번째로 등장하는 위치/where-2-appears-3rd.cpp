@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 여기에 코드를 작성해주세요.
+    int n = 0;
+    cin >> n;
+    int nums[n] = {0,};
+
+    for(int i = 0; i < n; i++){
+        cin >> nums[i];
+    }
+
+    int count = 0;
+
+    for(int j = 0; j < n; j++){
+        if(nums[j] == 2){
+            count++;
+            if(count == 3) cout << j+1;
+        }
+    }
+
+    return 0;
+}
