@@ -26,7 +26,7 @@ int main() {
         }
     }
 
-    printf("%d %.2f", cnt, float(total/cnt));
+    printf("%d %.2f", cnt, float(total)/float(cnt));
 
     return 0;
 }
