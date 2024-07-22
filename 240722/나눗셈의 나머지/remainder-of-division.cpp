@@ -7,7 +7,7 @@ int main() {
     cin >> a >> b;
     int remains[11] = {0, };
 
-    while(a >= 1){
+    while(a > 1){
         int remain = a % b;
         a = a / b;
         remains[remain]++;
