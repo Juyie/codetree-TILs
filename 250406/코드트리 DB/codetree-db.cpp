@@ -1,6 +1,28 @@
 #include <iostream>
 #include <map>
+#include <vector>
+#include <algorithm>
 using namespace std;
+
+const int MAX_V = 100000;
+long long tree[4 * MAX_V + 1];
+
+void updateTree(int node, int start, int end, int idx, int diff){
+    if(idx < start || idx > end) return;
+    tree[node] += diff;
+    if(start != end){
+        int mid = (start + end) / 2;
+        updateTree(node * 2, start, mid, idx, diff);
+        updateTree(node * 2 + 1, mid + 1, end, idx, diff);
+    }
+}
+
+long long query(int node, int start, int end, int l, int r){
+    if(r < start || l > end) return 0;
+    if(l <= start && end <= r) return tree[node];
+    int mid = (start + end) / 2;
+    return query(node * 2, start, mid, l, r) + query(node * 2 + 1, mid + 1, end, l, r);
+}
 
 int main() {
     ios::sync_with_stdio(false);
@@ -19,6 +41,7 @@ int main() {
         if(cmd == "init"){
             DB_n.clear();
             DB_v.clear();
+            fill(tree, tree + 4 * MAX_V + 1, 0);
         }
         else if(cmd == "insert"){
             string name;
@@ -27,6 +50,7 @@ int main() {
             if(DB_n.find(name) == DB_n.end() && DB_v.find(value) == DB_v.end()){
                 DB_n[name] = value;
                 DB_v[value] = name;
+                updateTree(1, 1, MAX_V, value, value);
                 cout << 1 << "\n";
             }
             else{
@@ -44,6 +68,7 @@ int main() {
                 cout << value << "\n";
                 DB_n.erase(name);
                 DB_v.erase(value);
+                updateTree(1, 1, MAX_V, value, -value);
             }
         }
         else if(cmd == "rank"){
@@ -63,16 +88,7 @@ int main() {
         else if(cmd == "sum"){
             int k;
             cin >> k;
-            long long output = 0;
-            for(auto iter = DB_v.begin(); iter != DB_v.end(); iter++){
-                if(iter->first > k){
-                    break;
-                }
-                else{
-                    output += iter->first;
-                }
-            }
-            cout << output << "\n";
+            cout << query(1, 1, MAX_V, 1, k) << "\n";
         }
     }
 
