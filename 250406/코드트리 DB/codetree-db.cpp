@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-const int MAX_V = 100000;
+const int MAX_V = 1000000000;
 long long tree[4 * MAX_V + 1];
 
 void updateTree(int node, int start, int end, int idx, int diff){
