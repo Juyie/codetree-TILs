@@ -63,7 +63,7 @@ int main() {
         else if(cmd == "sum"){
             int k;
             cin >> k;
-            int output = 0;
+            long long output = 0;
             for(auto iter = DB_v.begin(); iter != DB_v.end(); iter++){
                 if(iter->first > k){
                     break;
