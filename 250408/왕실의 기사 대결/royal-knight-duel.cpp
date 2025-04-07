@@ -94,6 +94,9 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
                         return -1;
                     }
                 }
+                else{
+                    return -1; // 범위 바깥으로 나가는 경우도 이동 못함
+                }
             }
         } // 전체를 모두 이동 시켰을 때 벽이 아님
                 
