@@ -24,7 +24,7 @@ void printMap(vector<vector<int> >& map) {
 }
 
 bool rangeCheck(int a, int b, int c, int d, int e, int f) {
-    if (a >= -2 && a < R && c >= -2 && c < R && e >= -2 && e < R
+    if (a >= -3 && a < R && c >= -3 && c < R && e >= -3 && e < R
         && b >= 0 && b < C && d >= 0 && d < C && f >= 0 && f < C) {
         return true;
     }
@@ -109,12 +109,9 @@ int moveFairy(vector<vector<int> >& map, pair<int, int> fairy) {
 }
 
 int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
-    if(map[0][c - 1] != -1){ // 진입하는 첫 칸이 이미 꽉 찼다면
-        clearMap(map);
-    }
-    
     bool movable = true;
     pair<int, int> center = make_pair(-2, c - 1);
+    int cantMove = true;
 
     while (movable) {
         // 남쪽 이동
@@ -127,6 +124,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
         if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
             if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                 center.first += 1;
+                cantMove = false;
                 continue;
             }
         }
@@ -155,6 +153,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
                         temp_center.first += 1;
                         center = temp_center;
                         d = temp_d;
+                        cantMove = false;
                         continue;
                     }
                 }
@@ -185,6 +184,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
                         temp_center.first += 1;
                         center = temp_center;
                         d = temp_d;
+                        cantMove = false;
                         continue;
                     }
                 }
