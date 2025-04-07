@@ -109,6 +109,10 @@ int moveFairy(vector<vector<int> >& map, pair<int, int> fairy) {
 }
 
 int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
+    if(map[0][c - 1] != -1){ // 진입하는 첫 칸이 이미 꽉 찼다면
+        clearMap(map);
+    }
+    
     bool movable = true;
     pair<int, int> center = make_pair(-2, c - 1);
 
