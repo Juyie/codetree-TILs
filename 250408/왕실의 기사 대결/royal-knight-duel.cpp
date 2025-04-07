@@ -67,7 +67,9 @@ int calcDamage(vector<vector<int>> &map, vector<knight> &knights, int id){
 
     for(int i = up_x; i <= down_x; i++){
         for(int j = left_y; j <= right_y; j++){
-            if (i < 0 || i >= map.size() || j < 0 || j >= map[0].size()) continue;
+            if (i < 0 || i >= map.size() || j < 0 || j >= map[0].size()){
+                return 0;
+            }
             if(map[i][j] == 1){
                 //cout << "x: " << i << ", y: " << j << "\n";
                 output++;
@@ -108,6 +110,7 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
                     }
                 }
                 else{
+                    //cout << "out of bound" << "\n";
                     return -1; // 범위 바깥으로 나가는 경우도 이동 못함
                 }
             }
@@ -119,6 +122,9 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
                     //cout << "push: " << k + 1<< "\n";
                     neighbor_id.insert(k);
                     output = moveKnight(map, knights, k, dir, false, damage); // 처음 밀린 애가 아니니까 false로 넘기기
+                    if(output == -1){
+                        break; // 안되는 경우 하나라도 찾으면 멈추기
+                    }
                 }
             }
         }
