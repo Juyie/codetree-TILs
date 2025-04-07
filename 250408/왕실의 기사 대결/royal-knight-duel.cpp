@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
 using namespace std;
 
 struct knight{
@@ -25,7 +26,7 @@ public:
 // 위쪽 오른쪽 아래쪽 왼쪽
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, 1, 0, -1};
-queue<int> neighbor_id;
+set<int> neighbor_id;
 
 void printMap(vector<vector<int>> &map){
     for(int i = 0; i < map.size(); i++){
@@ -67,6 +68,7 @@ int calcDamage(vector<vector<int>> &map, vector<knight> &knights, int id){
     for(int i = up_x; i <= down_x; i++){
         for(int j = left_y; j <= right_y; j++){
             if(map[i][j] == 1){
+                //cout << "x: " << i << ", y: " << j << "\n";
                 output++;
             }
         }
@@ -114,16 +116,14 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
             if(k != id && knights[k].k > 0){ // 자신은 빼고 생각, 체력 남은 기사들에 대해서만 생각
                 if(checkKnight(knights, k, up_x + dx[dir], down_x + dx[dir], left_y + dy[dir], right_y + dy[dir])){ // 다른 기사가 있다면 기사 옆으로 밀기
                     //cout << "push: " << k + 1<< "\n";
-                    neighbor_id.push(k);
+                    neighbor_id.insert(k);
                     output = moveKnight(map, knights, k, dir, false, damage); // 처음 밀린 애가 아니니까 false로 넘기기
                 }
             }
         }
         if(output == -1){ // 다른 기사가 이동을 못한다면 이 기사도 이동 못함
             if(first){
-                while(!neighbor_id.empty()){
-                    neighbor_id.pop();
-                }
+                neighbor_id.clear();
             }
             //cout << "can't move" << "\n";
             return -1;
@@ -133,10 +133,12 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
             knights[id].r += dx[dir];
             knights[id].c += dy[dir];
             //cout << "move to: " << knights[id].r << ", " << knights[id].c << "\n";
-            while(!neighbor_id.empty()){
-                realMove(map, knights, neighbor_id.front(), dir);
-                neighbor_id.pop();
+            for(auto iter = neighbor_id.begin(); iter != neighbor_id.end(); iter++) {
+                if(knights[*iter].k > 0){
+                    realMove(map, knights, *iter, dir);
+                }
             }
+            neighbor_id.clear();
         }
     }
     return 0;
