@@ -67,9 +67,9 @@ int calcDamage(vector<vector<int>> &map, vector<knight> &knights, int id){
 
     for(int i = up_x; i <= down_x; i++){
         for(int j = left_y; j <= right_y; j++){
-            if (i < 0 || i >= map.size() || j < 0 || j >= map[0].size()){
-                return 0;
-            }
+            //if (i < 0 || i >= map.size() || j < 0 || j >= map[0].size()){
+            //    return 0;
+            //}
             if(map[i][j] == 1){
                 //cout << "x: " << i << ", y: " << j << "\n";
                 output++;
