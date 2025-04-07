@@ -24,7 +24,7 @@ void printMap(vector<vector<int> >& map) {
 }
 
 bool rangeCheck(int a, int b, int c, int d, int e, int f) {
-    if (a >= -1 && a < R && c >= -1 && c < R && e >= -1 && e < R
+    if (a >= -2 && a < R && c >= -2 && c < R && e >= -2 && e < R
         && b >= 0 && b < C && d >= 0 && d < C && f >= 0 && f < C) {
         return true;
     }
@@ -121,7 +121,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
         int right_x = center.first + 1;
         int right_y = center.second + 1;
         if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
-            if ((left_x < 0 || map[left_x][left_y] == -1) && map[front_x][front_y] == -1 && (right_x < 0 || map[right_x][right_y] == -1)) {
+            if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                 center.first += 1;
                 continue;
             }
@@ -136,7 +136,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
         pair<int, int> temp_center = center;
         int temp_d = d;
         if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
-            if ((left_x < 0 || map[left_x][left_y] == -1) && map[front_x][front_y] == -1 && (right_x < 0 || map[right_x][right_y] == -1)) {
+            if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                 temp_center.second -= 1;
                 temp_d = counterclockwise(temp_d);
 
@@ -147,7 +147,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
                 right_x = temp_center.first + 1;
                 right_y = temp_center.second + 1;
                 if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
-                    if ((left_x < 0 || map[left_x][left_y] == -1) && map[front_x][front_y] == -1 && (right_x < 0 || map[right_x][right_y] == -1)) {
+                    if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                         temp_center.first += 1;
                         center = temp_center;
                         d = temp_d;
@@ -166,7 +166,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
         temp_center = center;
         temp_d = d;
         if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
-            if ((left_x < 0 || map[left_x][left_y] == -1) && map[front_x][front_y] == -1 && (right_x < 0 || map[right_x][right_y] == -1)) {
+            if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                 temp_center.second += 1;
                 temp_d = clockwise(temp_d);
 
@@ -177,7 +177,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
                 right_x = temp_center.first + 1;
                 right_y = temp_center.second + 1;
                 if (rangeCheck(left_x, left_y, front_x, front_y, right_x, right_y)) {
-                    if ((left_x < 0 || map[left_x][left_y] == -1) && map[front_x][front_y] == -1 && (right_x < 0 || map[right_x][right_y] == -1)) {
+                    if ((left_x < 0 || map[left_x][left_y] == -1) && (front_x < 0 || map[front_x][front_y] == -1) && (right_x < 0 || map[right_x][right_y] == -1)) {
                         temp_center.first += 1;
                         center = temp_center;
                         d = temp_d;
@@ -188,10 +188,13 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
         }
         movable = false;
     }
+    
+    //cout << "골렘 다 쌓은 지도" << "\n";
+    //printMap(map);
 
     int moveCount = 0;
     // 이동 다 했는데 지도 밖으로 벗어나 있으면 지도 지우기
-    if (center.first <= 0) {
+    if (center.first < 0) {
         clearMap(map);
     }
     else {
@@ -205,8 +208,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
                 map[center.first + dx[i]][center.second + dy[i]] = order;
             }
         }
-        //cout << "골렘 다 쌓은 지도" << "\n";
-        //printMap(map);
+       
         moveCount = moveFairy(map, center);
     }
 
