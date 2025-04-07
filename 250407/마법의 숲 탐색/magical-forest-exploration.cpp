@@ -194,7 +194,7 @@ int moveGolem(vector<vector<int> >& map, int c, int d, int order) {
 
     int moveCount = 0;
     // 이동 다 했는데 지도 밖으로 벗어나 있으면 지도 지우기
-    if (center.first < 0) {
+    if (center.first <= 0) {
         clearMap(map);
     }
     else {
