@@ -3,11 +3,6 @@
 #include <queue>
 using namespace std;
 
-// 위쪽 오른쪽 아래쪽 왼쪽
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, 1, 0, -1};
-queue<pair<int, int>> order;
-
 struct knight{
 public:
     int r;
@@ -26,6 +21,11 @@ public:
         origin_k = _k;
     };
 };
+
+// 위쪽 오른쪽 아래쪽 왼쪽
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, 1, 0, -1};
+queue<int> neighbor_id;
 
 void printMap(vector<vector<int>> &map){
     for(int i = 0; i < map.size(); i++){
@@ -56,11 +56,11 @@ bool checkKnight(vector<knight> &knights, int id, int up_x1, int down_x1, int le
     return false; // 아무도 없으면 false 리턴
 }
 
-int calcDamage(vector<vector<int>> &map, knight knights){
-    int up_x = knights.r;
-    int down_x = up_x + knights.h - 1;
-    int left_y = knights.c;
-    int right_y = left_y + knights.w - 1;
+int calcDamage(vector<vector<int>> &map, vector<knight> &knights, int id){
+    int up_x = knights[id].r;
+    int down_x = up_x + knights[id].h - 1;
+    int left_y = knights[id].c;
+    int right_y = left_y + knights[id].w - 1;
     //cout << "(" << up_x << ", " << left_y << "), (" << down_x << ", " << right_y << ")\n";
     int output = 0;
 
@@ -72,6 +72,16 @@ int calcDamage(vector<vector<int>> &map, knight knights){
         }
     }
     return output;
+}
+
+void realMove(vector<vector<int>> &map, vector<knight> &knights, int id, int dir){
+    knights[id].r += dx[dir];
+    knights[id].c += dy[dir];
+    int damage = calcDamage(map, knights, id);
+    //cout << "Damage: " << damage << "\n";
+    //cout << "Before: " << knights[id].k;
+    knights[id].k -= damage;
+    //cout << ", After: " << knights[id].k << "\n";
 }
 
 int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int dir, bool first, int damage){
@@ -104,23 +114,28 @@ int moveKnight(vector<vector<int>> &map, vector<knight> &knights, int id, int di
             if(k != id && knights[k].k > 0){ // 자신은 빼고 생각, 체력 남은 기사들에 대해서만 생각
                 if(checkKnight(knights, k, up_x + dx[dir], down_x + dx[dir], left_y + dy[dir], right_y + dy[dir])){ // 다른 기사가 있다면 기사 옆으로 밀기
                     //cout << "push: " << k + 1<< "\n";
+                    neighbor_id.push(k);
                     output = moveKnight(map, knights, k, dir, false, damage); // 처음 밀린 애가 아니니까 false로 넘기기
                 }
             }
         }
         if(output == -1){ // 다른 기사가 이동을 못한다면 이 기사도 이동 못함
+            if(first){
+                while(!neighbor_id.empty()){
+                    neighbor_id.pop();
+                }
+            }
             //cout << "can't move" << "\n";
             return -1;
         }
-        else{ // 좌표 이동 시키고, 체력 깎기
+        else if (output != -1 && first) { // 좌표 이동 시키기
             //cout << "can move: " << id + 1 << "\n";
             knights[id].r += dx[dir];
             knights[id].c += dy[dir];
             //cout << "move to: " << knights[id].r << ", " << knights[id].c << "\n";
-            if(!first){ // 밀린 애라면 체력도 깎기
-                damage = calcDamage(map, knights[id]);
-                //cout << "damage(" << id + 1 << "): " << damage << "\n";
-                knights[id].k -= damage;
+            while(!neighbor_id.empty()){
+                realMove(map, knights, neighbor_id.front(), dir);
+                neighbor_id.pop();
             }
         }
     }
@@ -152,6 +167,7 @@ int main() {
     for(int i = 0; i < Q; i++){
         int id, dir;
         cin >> id >> dir;
+        //cout << "Trial: " << i + 1 << "\n";
         moveKnight(map, knights, id - 1, dir, true, 0);
         //cout << "1: " << knights[0].k << ", 2: " << knights[1].k << ", 3: " << knights[2].k << "\n";
     }
