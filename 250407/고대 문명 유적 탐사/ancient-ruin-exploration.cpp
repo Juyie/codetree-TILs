@@ -162,44 +162,6 @@ int turnMap(vector<vector<int>> &map){
         }
     }
 
-    for(int i = 1; i < 4; i++){
-        for(int j = 1; j < 4; j++){
-            tempMap = map;
-            turn270(tempMap, i, j);
-            count = calcValue_bfs(tempMap);
-            if(count > maximum){
-                max_x = i;
-                max_y = j;
-                maximum = count;
-                type = 2;
-            }
-            else if(count == maximum){
-                if(type < 2){
-                    max_x = i;
-                    max_y = j;
-                    maximum = count;
-                    type = 1;
-                }
-                else if(type == 2){
-                    if(i < max_x){
-                        max_x = i;
-                        max_y = j;
-                        maximum = count;
-                        type = 1;
-                    }
-                    else if(i == max_x){
-                        if(j < max_y){
-                            max_x = i;
-                            max_y = j;
-                            maximum = count;
-                            type = 1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     // 가장 값이 큰 것으로 진짜 지도를 회전
     if(type == 0){
         turn90(map, max_x, max_y);
