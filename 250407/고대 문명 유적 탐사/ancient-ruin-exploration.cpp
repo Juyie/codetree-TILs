@@ -148,15 +148,35 @@ int turnMap(vector<vector<int>> &map){
                     turn270(tempMap, i, j);
                 }
                 count = calcValue_bfs(tempMap);
-                if (count > maximum ||
-                    (count == maximum && (g < type || // 더 적은 회전
-                    (g == type && (j < max_y || // 열이 더 작거나
-                    (j == max_y && i < max_x) // 열이 같을 때 행이 더 작으면
-                    ))))){
+                if (count > maximum){
                     max_x = i;
                     max_y = j;
                     maximum = count;
                     type = g;
+                }
+                else if(count == maximum){
+                    if(g < type){
+                        max_x = i;
+                        max_y = j;
+                        maximum = count;
+                        type = g;
+                    }
+                    else if(g == type){
+                        if(j < max_y){
+                            max_x = i;
+                            max_y = j;
+                            maximum = count;
+                            type = g;
+                        }
+                        else if(j == max_y){
+                            if(i < max_x){
+                                max_x = i;
+                                max_y = j;
+                                maximum = count;
+                                type = g;
+                            }
+                        }
+                    }
                 }
             }
         }
