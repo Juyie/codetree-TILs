@@ -70,7 +70,7 @@ void turn270(vector<vector<int>> &map, int x, int y){
 void fillBlank(vector<vector<int>> &map){
     for(int j = 0; j < 5; j++){
         for(int i = 4; i >= 0; i--){
-            if(map[i][j] == 0){
+            if(map[i][j] == 0 && !newNumber.empty()){
                 map[i][j] = newNumber.front();
                 newNumber.pop();
             }
@@ -85,20 +85,18 @@ int calcValue_bfs(vector<vector<int>> &map){
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
             int value = 0;
-            int num = 1;
-            queue<tuple<pair<int, int>, int, int>> q;
+            queue<pair<pair<int, int>, int>> q;
             queue<pair<int, int>> del;
             if(!visited[i][j]){
                 visited[i][j] = true;
                 value = map[i][j];
-                q.push(make_tuple(make_pair(i, j),value, num));
+                q.push(make_pair(make_pair(i, j),value));
                 del.push(make_pair(i, j));
 
                 while(!q.empty()){
-                    int x = get<0>(q.front()).first;
-                    int y = get<0>(q.front()).second;
-                    int v = get<1>(q.front());
-                    int n = get<2>(q.front());
+                    int x = q.front().first.first;
+                    int y = q.front().first.second;
+                    int v = q.front().second;
                     q.pop();
                     for(int k = 0; k < 4; k++){
                         int nx = x + dx4[k];
@@ -106,9 +104,8 @@ int calcValue_bfs(vector<vector<int>> &map){
                         if(nx >= 0 && nx < 5 && ny >= 0 && ny < 5){
                             if(!visited[nx][ny] && map[nx][ny] == v){
                                 visited[nx][ny] = true;
-                                q.push(make_tuple(make_pair(nx, ny), v, n + 1));
+                                q.push(make_pair(make_pair(nx, ny), v));
                                 del.push(make_pair(nx, ny));
-                                num = n + 1;
                             }
                         }
                     }
@@ -130,8 +127,8 @@ int calcValue_bfs(vector<vector<int>> &map){
 }
 
 int turnMap(vector<vector<int>> &map){
-    int max_x = 0;
-    int max_y = 0;
+    int max_x = 1;
+    int max_y = 1;
     int maximum = 0;
     int type = 0;
     int count = 0;
@@ -178,7 +175,7 @@ int turnMap(vector<vector<int>> &map){
             }
         }
     }
-    
+
     // 가장 값이 큰 것으로 진짜 지도를 회전
     if(type == 0){
         turn90(map, max_x, max_y);
