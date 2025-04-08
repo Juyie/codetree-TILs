@@ -198,7 +198,7 @@ pair<int, int> chooseAttacker(vector<vector<mapInfo>>& map) {
             }
         }
     }
-    map[r][c].power += N + M;
+    //map[r][c].power += N + M;
     //cout << map[r][c].power << "\n";
     return make_pair(r, c);
 }
@@ -264,6 +264,7 @@ int main() {
         pair<int, int> attacker = chooseAttacker(map);
         pair<int, int> victim = chooseVictim(map);
         map[attacker.first][attacker.second].attack_time = i + 1;
+        map[attacker.first][attacker.second].power += N + M;
         //cout << "attacker: " << attacker.first << ", " << attacker.second << ", victim: " << victim.first << ", " << victim.second << "\n";
         int laser = laserAttack(map, attacker, victim);
         destroyTower(map);
