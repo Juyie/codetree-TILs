@@ -134,12 +134,10 @@ void bombAttack(vector<vector<mapInfo>>& map, pair<int, int> attacker, pair<int,
     map[target_x][target_y].attacked = 2;
 
     for (int i = 0; i < 8; i++) {
-        int nx = target_x + dx8[i];
-        int ny = target_y + dy8[i];
+        int nx = (target_x + dx8[i] + N) % N;
+        int ny = (target_y + dy8[i] + M) % M;
         if (nx == attacker.first && ny == attacker.second) continue;
-        if (map[(nx + N) % N][(ny + M) % M].power > 0) {
-            map[(nx + N) % N][(ny + M) % M].attacked = 1;
-        }
+        map[nx][ny].attacked = 1;
     }
 
     attackAll(map, power / 2);
