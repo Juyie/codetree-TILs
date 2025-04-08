@@ -160,7 +160,7 @@ int mostPowerful(vector<vector<mapInfo>>& map) {
 pair<int, int> chooseAttacker(vector<vector<mapInfo>>& map) {
     int r = 0;
     int c = 0;
-    int minimum = 5001;
+    int minimum = 1000000;
     int last_attack = -1;
 
     for (int i = 0; i < N; i++) {
@@ -198,8 +198,6 @@ pair<int, int> chooseAttacker(vector<vector<mapInfo>>& map) {
             }
         }
     }
-    //map[r][c].power += N + M;
-    //cout << map[r][c].power << "\n";
     return make_pair(r, c);
 }
 
@@ -211,6 +209,7 @@ pair<int, int> chooseVictim(vector<vector<mapInfo>>& map) {
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
+            if(map[i][j].power == 0) continue;
             if (map[i][j].power > maximum) {
                 maximum = map[i][j].power;
                 last_attack = map[i][j].attack_time;
@@ -246,6 +245,18 @@ pair<int, int> chooseVictim(vector<vector<mapInfo>>& map) {
     return make_pair(r, c);
 }
 
+int countLeftTower(vector<vector<mapInfo>> &map){
+    int left = 0;
+    for(int i = 0; i < map.size(); i++){
+        for(int j = 0; j < map[0].size(); j++){
+            if(map[i][j].power != 0){
+                left++;
+            }
+        }
+    }
+    return left;
+}
+
 int main() {
     int K;
     cin >> N >> M >> K;
@@ -274,6 +285,7 @@ int main() {
             destroyTower(map);
         }
         //printMap(map);
+        if(countLeftTower(map) == 1) break;
     }
 
     cout << mostPowerful(map);
