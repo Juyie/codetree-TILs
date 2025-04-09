@@ -150,6 +150,17 @@ vector<pair<int, int>> findClosest(vector<player>& players, pair<int, int> &exit
     }
 }
 
+bool checkAllExcape(vector<player>& players) {
+    bool escape = true;
+    for (int i = 0; i < players.size(); i++) {
+        if (!players[i].escape) {
+            escape = false;
+            return escape;
+        }
+    }
+    return escape;
+}
+
 void escape(vector<vector<int>>& map, vector<player>& players, pair<int, int> &exit) {
     // 탈출 못한 플레이어 이동
     for (int i = 0; i < players.size(); i++) {
@@ -180,21 +191,14 @@ void escape(vector<vector<int>>& map, vector<player>& players, pair<int, int> &e
         }
     }
 
+    if (checkAllExcape(players)) {
+        return;
+    }
+
     // 가장 가까운 플레이어 찾기
     vector<pair<int, int>> colsest = findClosest(players, exit);
     // 찾은 사각형 기준으로 90도 회전하기
     turn90(map, players, colsest, exit);
-}
-
-bool checkAllExcape(vector<player>& players) {
-    bool escape = true;
-    for (int i = 0; i < players.size(); i++) {
-        if (!players[i].escape) {
-            escape = false;
-            return escape;
-        }
-    }
-    return escape;
 }
 
 int main() {
