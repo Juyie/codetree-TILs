@@ -34,9 +34,9 @@ void printMap(vector<vector<int>> map) {
     }
 }
 
-void moveError(vector<vector<int>>& map, vector<error> &errors, int time) {
+void moveError(vector<vector<int>>& map, vector<error>& errors, int time) {
     for (int i = 0; i < errors.size(); i++) {
-        for (int j = 0; j < time; j++) {
+        for (int j = 1; j <= time; j++) {
             if (j % errors[i].v == 0) {
                 int nx = errors[i].x + dx[errors[i].d];
                 int ny = errors[i].y + dy[errors[i].d];
@@ -89,7 +89,7 @@ int escapeTimewall(vector<vector<int>>& timeMap, pair<int, int> start, pair<int,
                             visited[-y + 3 * M + 1][-x + 3 * M + 1] = true;
                             q.push(make_pair(make_pair(-y + 3 * M + 1, -x + 3 * M + 1), t + 1));
                         }
-                    
+
                     }
                 }
             }
@@ -111,7 +111,7 @@ int escapeSpace(vector<vector<int>>& map, vector<error>& errors, pair<int, int> 
         int x = q.front().first.first;
         int y = q.front().first.second;
         int t = q.front().second;
-        moveError(temp, tempError, t); // 에러가 t초만큼 번진 상태에서 가능한 경로 찾기
+        moveError(temp, tempError, t + 1); // 에러가 t + 1초만큼 번진 상태에서 가능한 경로 찾기
         //cout << t << ": ";
         //printMap(temp);
         //cout << x << ", " << y << ", " << t << "\n";
@@ -273,10 +273,11 @@ int main() {
         errors[i].setError(r, c, d, v);
         map[r][c] = 1;
     }
-    
+
     int time = 0;
     time = escapeTimewall(timeMap, timeMachine, timeGoal);
     if (time == -1) {
+        //cout << "time wall ";
         cout << -1;
         return 0;
     }
