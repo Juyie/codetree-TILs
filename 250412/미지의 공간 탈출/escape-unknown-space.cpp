@@ -36,7 +36,7 @@ void printMap(vector<vector<int>> map) {
 
 void moveError(vector<vector<int>>& map, vector<error> &errors, int time) {
     for (int i = 0; i < errors.size(); i++) {
-        for (int j = 1; j <= time; j++) {
+        for (int j = 0; j < time; j++) {
             if (j % errors[i].v == 0) {
                 int nx = errors[i].x + dx[errors[i].d];
                 int ny = errors[i].y + dy[errors[i].d];
@@ -289,7 +289,7 @@ int main() {
         return 0;
     }
 
-    cout << time + time2 - 1;
+    cout << time2;
 
     return 0;
 }
