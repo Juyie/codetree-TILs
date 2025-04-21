@@ -28,7 +28,7 @@ void printMap(vector<vector<cell> > map) {
     }
 }
 
-bool comp(pair<pair<int, int>, pair<int, int> > a, pair<pair<int, int>, pair<int, int> > b) {
+bool comp(pair<pair<int, int>, pair<int, int> > &a, pair<pair<int, int>, pair<int, int> > &b) {
     if (a.first.first != b.first.first) {
         // 그룹 (낮은순)
         return a.first.first < b.first.first;
@@ -48,6 +48,7 @@ bool comp(pair<pair<int, int>, pair<int, int> > a, pair<pair<int, int>, pair<int
             }
         }
     }
+    return false;
 }
 
 void resetAttack(vector<vector<cell> > &map) {
@@ -122,6 +123,7 @@ void dinner(vector<vector<cell> > &map, vector<pair<pair<int, int>, pair<int, in
                             // 강한 전파
                             //cout << "(" << nx << ", " << ny << "): strong" << "\n";
                             map[nx][ny].color = map[x][y].color;
+                            map[nx][ny].group = map[x][y].group;
                             raser_power -= map[nx][ny].power + 1;
                             map[nx][ny].power++;
                             map[nx][ny].attacked = true;
@@ -174,6 +176,18 @@ void lunch(vector<vector<cell> > &map) {
                                     max_power = map[nx][ny].power;
                                     max_x = nx;
                                     max_y = ny;
+                                } else if (map[nx][ny].power == max_power) {
+                                    if (nx < max_x) {
+                                        max_power = map[nx][ny].power;
+                                        max_x = nx;
+                                        max_y = ny;
+                                    } else if (nx == max_x) {
+                                        if (ny < max_y) {
+                                            max_power = map[nx][ny].power;
+                                            max_x = nx;
+                                            max_y = ny;
+                                        }
+                                    }
                                 }
                                 q.push({nx, ny});
                                 group.push_back({nx, ny});
@@ -183,7 +197,6 @@ void lunch(vector<vector<cell> > &map) {
                 }
 
                 // group에 같은 그룹 인덱스 모두 들어있음.
-                attacker.push_back({{map[max_x][max_y].group, max_power}, {max_x, max_y}});
                 int n = group.size();
                 for (int i = 0; i < n; i++) {
                     if (group[i].first == max_x && group[i].second == max_y) {
@@ -192,6 +205,7 @@ void lunch(vector<vector<cell> > &map) {
                         map[group[i].first][group[i].second].power--;
                     }
                 }
+                attacker.push_back({{map[max_x][max_y].group, map[max_x][max_y].power}, {max_x, max_y}});
             }
         }
     }
